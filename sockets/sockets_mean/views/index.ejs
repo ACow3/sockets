@@ -10,9 +10,24 @@
 </head>
 <script type ="text/javascript">
     $(document).ready(function (){
-    
         // initializing socket connection
-        var socket = io(); //1
+        var socket = io(); //1 declare variable socket to call .emit on -->
+        var user = prompt("Enter your name")
+        console.log(user)
+
+        // Add user to database
+        socket.emit('addNewUser', user)
+
+        // Response from server
+        socket.on('newuser', function (data) {
+            $('#welcomeUser').html(`Welcome ${data.name}`)
+        })
+
+        // Validations to fix later
+        // socket.on('errmsg', function (data) {
+        //     $('#error').html(data)
+        // })
+
     
         socket.on('greeting', function (data) { //4
             console.log(data.msg); //5
@@ -22,5 +37,17 @@
 </script>
 <body>
     <h1>Hello Sockets</h1>
+    <p id='error'></p>
+    <h2 id="welcomeUser">Welcome, </h2>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                    <textarea id="userinput"></textarea>
+                    <button>Send</button>
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
 </body>
 </html>

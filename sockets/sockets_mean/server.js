@@ -19,10 +19,24 @@ app.get('/', (req, res) => {
 var users = [];
 
 io.on('connection', function (socket) { //2
-    newUser = {
-        'id' : socket.id
-    }
-    users.push(newUser);
+
+    // Whenever new user is added below is created
+    socket.on('addNewUser', function (data) {
+        console.log(data)
+        // Validations to improve later
+        // var isValid = validateUser(data)
+        // if(isValid){
+            newUser = {
+                'id' : socket.id,
+                'name' : data
+            }
+            socket.emit('newUser', newuser)
+            users.push(newUser);
+        // } else {
+        //     socket.emit('errmsg', 'User already exists')
+        // }
+    })
+
     console.log("Number of users: ", users)
     console.log("Socket ID: ", socket.id)
     socket.emit('greeting', { msg: 'Greetings, from server Node, brought to you by Sockets! -Server' }); //3
@@ -31,3 +45,13 @@ io.on('connection', function (socket) { //2
     });
       
   });
+
+//   function validateUser(name){
+//       for(user in users){
+//           if(user['name'] === name){
+//               return true;
+//           } else {
+//            return false;
+//           }
+//       }
+//   }
